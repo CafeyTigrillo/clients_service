@@ -1,5 +1,4 @@
-Aquí tienes una versión limpia del README sin imágenes ni tablas:
-markdownCopy# 🏢 Client Service API
+# 🏢 Client Service API
 
 > A powerful REST API built with Spring Boot for managing client data efficiently.
 
@@ -32,7 +31,7 @@ Client {
     String dni
     String email
 }
-´´´
+```
 🗂 Project Structure
 ```java
 com.mipagina.client_service/
@@ -43,4 +42,4 @@ com.mipagina.client_service/
 │   └── Client.java
 └── 📁 repository/
     └── IClientRepository.java
-´´´
+```
