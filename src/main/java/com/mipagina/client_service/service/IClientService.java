@@ -11,5 +11,4 @@ public interface IClientService {
     public Client findClient(Long id_client);
     public void editClient(Long idClient,Client client);
 
-    //public Client findPacienteDni(String dni);
 }
