@@ -35,29 +35,14 @@ jobs:
           docker build -t richard28/clients-service:latest .
           docker push richard28/clients-service:latest
 
-      # 6. Configurar la instancia EC2
-      - name: Setup EC2 environment
+      # 6. Desplegar en EC2
+      - name: Deploy to EC2
         run: |
-          echo "${{ secrets.AWS_SSH_KEY }}" > key.pem
-          chmod 400 key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
-            # Instalar Docker Compose si no está instalado
-            if ! command -v docker-compose &> /dev/null
-            then
-              echo "Docker Compose no está instalado. Instalando..."
-              sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-              sudo chmod +x /usr/local/bin/docker-compose
-            fi
-          EOF
+          echo "${{ secrets.AWS_SSH_KEY }}" > /tmp/key.pem
+          chmod 400 /tmp/key.pem
+          ssh -o StrictHostKeyChecking=no -i /tmp/key.pem ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
+            docker pull richard28/clients-service:latest
 
-      # 7. Desplegar Client-Service en la instancia EC2
-      - name: Deploy Client-Service on EC2
-        run: |
-          echo "${{ secrets.AWS_SSH_KEY }}" > key.pem
-          chmod 400 key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
-            cd /home/ec2-user/
-            
             # Crear o actualizar el archivo docker-compose.yml
             cat << 'DOCKER_COMPOSE' > docker-compose.yml
             version: '3.8'
@@ -86,4 +71,5 @@ jobs:
             # Ejecutar Docker Compose
             docker-compose pull
             docker-compose up -d
+            exit
           EOF
