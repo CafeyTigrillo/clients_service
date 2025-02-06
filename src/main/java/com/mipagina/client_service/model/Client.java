@@ -1,5 +1,6 @@
 package com.mipagina.client_service.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,20 +10,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//@Getter @Setter
-//@AllArgsConstructor
-//@NoArgsConstructor
 @Entity
 public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Unique identifier of the client", example = "1")
     private Long id_client;
+
+    @Schema(description = "First name of the client", example = "John", required = true)
     private String name;
+
+    @Schema(description = "Last name of the client", example = "Doe", required = true)
     private String lastname;
+
+    @Schema(description = "Address of the client", example = "123 Main Street, NY", required = true)
     private String address;
+
+    @Schema(description = "Phone number of the client", example = "+1 123 456 7890", required = true)
     private String phone;
+
+    @Schema(description = "National identification number (DNI)", example = "12345678", required = true)
     private String dni;
+
+    @Schema(description = "Email address of the client", example = "john.doe@example.com", required = true)
     private String email;
 
     public Long getId_client() {
