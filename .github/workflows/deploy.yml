@@ -10,32 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout del código fuente
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Configurar JDK y Maven
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # 3. Construir el proyecto con Maven
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      # 4. Loguearse en DockerHub
       - name: Login to DockerHub
         run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      # 5. Construir y subir la imagen Docker
       - name: Build and push Docker image
         run: |
           docker build -t richard28/clients-service:latest .
           docker push richard28/clients-service:latest
 
-      # 6. Desplegar en EC2
       - name: Deploy to EC2
         run: |
           echo "${{ secrets.AWS_SSH_KEY }}" > /tmp/key.pem
@@ -43,33 +37,9 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i /tmp/key.pem ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
             docker pull richard28/clients-service:latest
 
-            # Crear o actualizar el archivo docker-compose.yml
-            cat << 'DOCKER_COMPOSE' > docker-compose.yml
-            version: '3.8'
-
-            services:
-              eureka-server:
-                image: richard28/eureka-server:latest
-                container_name: eureka-server
-                ports:
-                  - "8761:8761"
-
-              clients-service:
-                image: richard28/clients-service:latest
-                container_name: clients-service
-                depends_on:
-                  - eureka-server
-                environment:
-                  - EUREKA_SERVER_HOST=http://eureka-server:8761/eureka
-                  - DB_HOST=database-prueba.cj37eoxikdhd.us-east-1.rds.amazonaws.com
-                  - DB_USER=admin
-                  - DB_PASS=Kiet1993
-                ports:
-                  - "8081:8081"
-            DOCKER_COMPOSE
-
-            # Ejecutar Docker Compose
             docker-compose pull
+
             docker-compose up -d
+
             exit
           EOF
