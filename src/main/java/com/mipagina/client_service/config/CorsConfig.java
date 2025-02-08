@@ -16,7 +16,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Permitir CORS en todos los endpoints
-                        .allowedOrigins("ec2-52-54-91-40.compute-1.amazonaws.com:3000") // Cambia esto por la IP/DNS pública de tu frontend en AWS
+                        .allowedOrigins("ec2-34-196-60-192.compute-1.amazonaws.com:3000") // Cambia esto por la IP/DNS pública de tu frontend en AWS
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
