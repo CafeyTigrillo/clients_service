@@ -15,8 +15,8 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // Permitir CORS en todos los endpoints
-                        .allowedOrigins("http://34.196.60.192:3000") // Cambia esto por la IP/DNS pública de tu frontend en AWS
+                registry.addMapping("/**")
+                        .allowedOrigins("http://ec2-13-216-183-248.compute-1.amazonaws.com:3000")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
